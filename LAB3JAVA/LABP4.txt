@@ -1,0 +1,89 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class Lab3Part4 {
+    private double balance = 50.0;
+    private JLabel balanceLabel;
+
+    public Lab3Part4() {
+        JFrame frame = new JFrame("Mobile Top-up System");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(300, 200);
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new BorderLayout());
+
+        balanceLabel = new JLabel("Balance: $" + balance);
+        balanceLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        panel.add(balanceLabel, BorderLayout.NORTH);
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new FlowLayout());
+
+        JButton topUpButton = createButton("Top-up");
+        JButton makeCallButton = createButton("Make Call");
+        JButton sendTextButton = createButton("Send Text");
+
+        buttonPanel.add(topUpButton);
+        buttonPanel.add(makeCallButton);
+        buttonPanel.add(sendTextButton);
+
+        panel.add(buttonPanel, BorderLayout.CENTER);
+
+        frame.getContentPane().add(panel);
+        frame.setVisible(true);
+    }
+
+    private JButton createButton(String buttonText) {
+        JButton button = new JButton(buttonText);
+        button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (buttonText.equals("Top-up")) {
+                    topUp();
+                } else if (buttonText.equals("Make Call")) {
+                    makeCall();
+                } else if (buttonText.equals("Send Text")) {
+                    sendText();
+                }
+            }
+        });
+        return button;
+    }
+
+    private void topUp() {
+        balance += 10.0; // Example: Top-up $10
+        updateBalanceLabel();
+    }
+
+    private void makeCall() {
+        if (balance >= 5.0) { // Example: Call costs $5
+            balance -= 5.0;
+            updateBalanceLabel();
+        } else {
+            JOptionPane.showMessageDialog(null, "Insufficient balance to make a call.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void sendText() {
+        if (balance >= 2.0) { // Example: Sending a text costs $2
+            balance -= 2.0;
+            updateBalanceLabel();
+        } else {
+            JOptionPane.showMessageDialog(null, "Insufficient balance to send a text.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void updateBalanceLabel() {
+        if (balance < 0.0) {
+            balance = 0.0;
+        }
+        balanceLabel.setText("Balance: $" + String.format("%.2f", balance));
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> new Lab3Part4());
+    }
+}
